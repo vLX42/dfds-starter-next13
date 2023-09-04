@@ -1,11 +1,55 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import styles from "@/styles/Home.module.css";
+import { TextField } from "@dfds-ui/forms";
+import { theme, useBreakpoint } from "@dfds-ui/theme";
+import {
+  BuFreightShipping,
+  BuAboutDfds,
+  MoreHorizontal,
+  BuPax,
+  BuLogistics,
+} from "@dfds-ui/icons/system";
+import { Account, Settings, Search } from "@dfds-ui/icons/system";
+import {
+  AppBarProvider,
+  AppBarItem,
+  MenuPopOverContext,
+  AppBarListItem,
+  AppBarIconButton,
+  AppBar,
+  AppBarDrawer
+} from "@dfds-ui/react-components/app-bar";
+import { ListItem, ListText, ListIcon } from '@dfds-ui/react-components'
+import { useState } from "react";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const { lessThan } = useBreakpoint();
+
+  const businessUnits = [
+    {
+      name: "Passenger Ferries",
+      icon: BuPax,
+    },
+    {
+      name: "Freight Shipping",
+      icon: BuFreightShipping,
+    },
+    {
+      name: "Logistics Solutions",
+      icon: BuLogistics,
+    },
+    {
+      name: "About DFDS",
+      icon: BuAboutDfds,
+    },
+  ];
+
+  const [businessUnit, setBusinessUnit] = useState(businessUnits[0].name);
+
   return (
     <>
       <Head>
@@ -15,6 +59,102 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
+
+          <AppBarProvider>
+            <AppBar
+              logoProps={{
+                logoContainerProps: { as: "a", href: "en/freight-shipping" },
+              }}
+              leftActions={
+                <AppBarItem divider="end" title={businessUnit} id="main">
+                  <MenuPopOverContext.Consumer>
+                    {(context) => {
+                      return (
+                        <>
+                          {businessUnits.map(({ name, icon }) => (
+                            <AppBarListItem
+                              key={name}
+                              selected={name === businessUnit}
+                              clickable
+                              onClick={() => {
+                                context!.handlePopoverClose();
+                                setBusinessUnit(name);
+                              }}
+                            >
+                              <ListIcon
+                                size="large"
+                                color={theme.colors.primary.main}
+                                icon={icon}
+                              />
+                              <ListText>{name}</ListText>
+                            </AppBarListItem>
+                          ))}
+                        </>
+                      );
+                    }}
+                  </MenuPopOverContext.Consumer>
+                </AppBarItem>
+              }
+              actions={
+                <>
+                  <AppBarIconButton icon={Search} ariaLabel="Search" />
+                  <AppBarIconButton icon={Account} ariaLabel="Account" />
+              
+                </>
+              }
+            >
+              <AppBarItem title="Content1" id="content1" isActive />
+              <AppBarItem title="Content2" id="content2" />
+              <AppBarItem title="Content3" id="content3" />
+              <AppBarItem title="Identity" id="main">
+                <MenuPopOverContext.Consumer>
+                  {(context) => {
+                    return (
+                      <>
+                        <AppBarListItem
+                          clickable
+                          onClick={() => {
+                            context!.handlePopoverClose();
+                          }}
+                        >
+                          <ListText>Logistics Solutions</ListText>
+                        </AppBarListItem>
+                        <AppBarListItem
+                          clickable
+                          onClick={() => {
+                            context!.handlePopoverClose();
+                          }}
+                        >
+                          <ListText>Freight Shipping</ListText>
+                        </AppBarListItem>
+                        <AppBarListItem
+                          clickable
+                          onClick={() => {
+                            context!.handlePopoverClose();
+                          }}
+                        >
+                          <ListText>Passenger Ferries</ListText>
+                        </AppBarListItem>
+                      </>
+                    );
+                  }}
+                </MenuPopOverContext.Consumer>
+              </AppBarItem>
+              <AppBarItem title="Features" id="features" />
+            </AppBar>
+            <AppBarDrawer>
+              <AppBarListItem clickable>
+                <ListText>Logistics Solutions</ListText>
+              </AppBarListItem>
+              <AppBarListItem clickable>
+                <ListText>Freight Shipping</ListText>
+              </AppBarListItem>
+              <AppBarListItem clickable>
+                <ListText>Passenger Ferries</ListText>
+              </AppBarListItem>
+            </AppBarDrawer>
+          </AppBarProvider>
+
         <div className={styles.description}>
           <p>
             Get started by editing&nbsp;
@@ -26,7 +166,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              By{' '}
+              By{" "}
               <Image
                 src="/vercel.svg"
                 alt="Vercel Logo"
@@ -51,6 +191,13 @@ export default function Home() {
         </div>
 
         <div className={styles.grid}>
+          <TextField
+            name="basic"
+            label="Field label"
+            prefix="Test"
+            placeholder="Hint text"
+            help="I need some more help"
+          />{" "}
           <a
             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className={styles.card}
@@ -64,7 +211,6 @@ export default function Home() {
               Find in-depth information about Next.js features and&nbsp;API.
             </p>
           </a>
-
           <a
             href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className={styles.card}
@@ -78,7 +224,6 @@ export default function Home() {
               Learn about Next.js in an interactive course with&nbsp;quizzes!
             </p>
           </a>
-
           <a
             href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className={styles.card}
@@ -92,7 +237,6 @@ export default function Home() {
               Discover and deploy boilerplate example Next.js&nbsp;projects.
             </p>
           </a>
-
           <a
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className={styles.card}
@@ -110,5 +254,5 @@ export default function Home() {
         </div>
       </main>
     </>
-  )
+  );
 }
