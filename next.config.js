@@ -1,8 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true,
+  compiler: {
+    emotion: {
+      autoLabel: 'never'
+    },
+  },
   experimental: {
-    esmExternals: false,
+    optimizePackageImports: [
+      "@dfds-ui/react-components",
+      "@dfds-ui/colors",
+      "@dfds-ui/grid",
+      "@dfds-ui/icons",
+      "@dfds-ui/forms",
+      "@dfds-ui/modal",
+      "@dfds-frontend/cookie-consent",
+    ],
   },
   transpilePackages: [
     "@dfds-ui/icons",
